@@ -170,10 +170,12 @@ app.post('/events/crear', upload.single('imagen'), async (req, res) => {
 
 
 
-// Ruta de prueba
+
+
 app.get('/', (req, res) => {
-    res.send('🚀 ¡Servidor funcionando correctamente! Bienvenido a Eventos TSD 🎉');
-});
+    res.redirect('/public/register.html'); // O el nombre correcto de tu archivo de registro
+  });
+  
 
 
 
