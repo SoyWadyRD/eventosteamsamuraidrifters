@@ -339,6 +339,21 @@ app.get('/events/inscritos/:eventoId', async (req, res) => {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

@@ -10,32 +10,39 @@ router.post('/registro', async (req, res) => {
     try {
         const { nombreReal, nombreJuego, contrasena } = req.body;
 
-        // Verificar si ya existe el usuario con ese nombre de juego
+        // Verificar si ya existe el usuario
         const usuarioExistente = await Usuario.findOne({ nombreJuego });
         if (usuarioExistente) {
             return res.status(400).json({ message: 'El nombre de juego ya está registrado. Elige otro.' });
         }
 
-        // Crear el nuevo usuario con la contraseña que será cifrada en el middleware
+        // Crear el nuevo usuario
         const nuevoUsuario = new Usuario({
             nombreReal,
             nombreJuego,
             contrasena
         });
 
-        // Guardar el nuevo usuario en la base de datos
+        // Guardarlo en la base de datos
         await nuevoUsuario.save();
 
-        // Guardamos el ID del usuario en la sesión
-        req.session.usuarioId = nuevoUsuario._id; // Guardamos el ID de usuario en la sesión
+        // **Igual que login:** guardar id y rol en la sesión
+        req.session.usuario = { id: nuevoUsuario._id, rol: nuevoUsuario.rol };
 
-        res.status(200).json({ message: 'Usuario registrado correctamente.' });
+        // Devolver respuesta al frontend
+        res.status(200).json({
+            message: 'Registro exitoso',
+            usuarioId: nuevoUsuario._id,
+            rol: nuevoUsuario.rol
+        });
 
     } catch (error) {
         console.error('Error en el registro:', error);
-        res.status(500).json({ message: 'Hubo un error al registrar el usuario.' });
+        res.status(500).json({ message: 'Hubo un error al registrar el usuario' });
     }
 });
+
+
 
 
 

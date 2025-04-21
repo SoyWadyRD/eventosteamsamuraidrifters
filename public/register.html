@@ -26,27 +26,33 @@
     </div>
 
     <script>
-     document.getElementById('registerForm').addEventListener('submit', async function (e) {
+ document.getElementById('registerForm').addEventListener('submit', async function (e) {
     e.preventDefault();
 
     const nombreReal = document.getElementById('nombreReal').value;
     const nombreJuego = document.getElementById('nombreJuego').value;
     const contrasena = document.getElementById('contrasena').value;
 
-    const response = await fetch('/auth/registro', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ nombreReal, nombreJuego, contrasena })
-    });
+    try {
+        const response = await fetch('/auth/registro', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ nombreReal, nombreJuego, contrasena })
+        });
 
-    const data = await response.json();
-    if (data.message === 'Usuario registrado correctamente.') {
-        // Redirigir al panel de eventos después del registro exitoso
-        window.location.href = '/eventos'; // Cambia la URL a tu ruta de panel de eventos
-    } else {
-        alert(data.message || 'Registro fallido');
+        const data = await response.json();
+        
+        if (response.ok) {
+            alert('Registro exitoso');
+            window.location.href = '/eventos';  // Igual que en login
+        } else {
+            alert(data.message || 'Registro fallido');
+        }
+    } catch (error) {
+        console.error('Error en el registro:', error);
+        alert('Hubo un error al intentar registrarse');
     }
 });
 
