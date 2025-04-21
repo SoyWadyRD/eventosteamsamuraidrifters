@@ -4,11 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="logo.ico" type="image/x-icon">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <title>Crear Evento</title>
 </head>
 <body>
+
+    <!-- Botón Volver con estilos similares a Crear Evento -->
+    <div class="volver-btn-container">
+        <a href="/eventos" class="volver-btn">
+            <i class="fas fa-arrow-left"></i> Volver
+        </a>
+    </div>
+
+
+    <!-- Cuadro de mensaje de éxito -->
+    <div id="mensaje" class="mensaje" style="display: none;">
+        <div class="mensaje-contenido">
+            <p id="mensaje-texto"></p>
+            <button id="mensaje-aceptar" class="mensaje-aceptar-btn">Aceptar</button>
+        </div>
+    </div>
+
+
     <h1>Crear un nuevo evento</h1>
+    
 
     <form id="eventoForm" enctype="multipart/form-data">
         <label for="titulo">Título del Evento:</label>
@@ -30,7 +50,7 @@
     </form>
 
     <script>
-        document.getElementById('eventoForm').addEventListener('submit', async function (e) {
+         document.getElementById('eventoForm').addEventListener('submit', async function (e) {
             e.preventDefault();
 
             const formData = new FormData();
@@ -49,16 +69,31 @@
                 // Verifica si la respuesta fue exitosa
                 if (response.ok) {
                     const data = await response.json();
-                    alert(data.message);
+                    mostrarMensaje('Evento creado con éxito!', 'success');
+                    
+                    // Redirige a la página de eventos después de que el usuario cierre el mensaje
+                    document.getElementById('mensaje-aceptar').addEventListener('click', () => {
+                        window.location.href = '/eventos';
+                    });
                 } else {
                     const data = await response.json();
-                    alert('Error: ' + data.message);
+                    mostrarMensaje('Error: ' + data.message, 'error');
                 }
             } catch (error) {
                 console.error('Error al enviar el formulario:', error);
-                alert('Hubo un problema al enviar el formulario.');
+                mostrarMensaje('Hubo un problema al enviar el formulario.', 'error');
             }
         });
+
+        function mostrarMensaje(mensaje, tipo) {
+            const mensajeDiv = document.getElementById('mensaje');
+            const mensajeTexto = document.getElementById('mensaje-texto');
+
+            mensajeTexto.textContent = mensaje;
+            mensajeDiv.classList.remove('success', 'error');
+            mensajeDiv.classList.add(tipo);
+            mensajeDiv.style.display = 'flex'; // Se muestra el mensaje como un modal
+        }
     </script>
 </body>
 </html>

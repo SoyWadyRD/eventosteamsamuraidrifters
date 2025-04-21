@@ -25,36 +25,64 @@
         <p>¿Ya tienes cuenta? <a href="/public/login.html">Inicia sesión aquí</a></p>
     </div>
 
+
+   <!-- Cuadro de mensaje -->
+   <div id="mensajeRegistro" class="mensaje">
+    <div class="mensaje-contenido">
+        <div id="mensaje-texto">Registro exitoso</div>
+        <button class="mensaje-aceptar-btn" id="mensaje-aceptar-btn">Aceptar</button>
+    </div>
+</div>
+</div>
+
+
     <script>
  document.getElementById('registerForm').addEventListener('submit', async function (e) {
-    e.preventDefault();
+            e.preventDefault();
 
-    const nombreReal = document.getElementById('nombreReal').value;
-    const nombreJuego = document.getElementById('nombreJuego').value;
-    const contrasena = document.getElementById('contrasena').value;
+            const nombreReal = document.getElementById('nombreReal').value;
+            const nombreJuego = document.getElementById('nombreJuego').value;
+            const contrasena = document.getElementById('contrasena').value;
 
-    try {
-        const response = await fetch('/auth/registro', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ nombreReal, nombreJuego, contrasena })
+            try {
+                const response = await fetch('/auth/registro', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ nombreReal, nombreJuego, contrasena })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Mostrar cuadro de mensaje de éxito
+                    const mensaje = document.getElementById('mensajeRegistro');
+                    const mensajeTexto = document.getElementById('mensaje-texto');
+                    mensajeTexto.textContent = 'Registro exitoso';
+                    mensaje.style.display = 'flex'; // Mostrar el cuadro
+                } else {
+                    // Mostrar cuadro de mensaje de error
+                    const mensaje = document.getElementById('mensajeRegistro');
+                    const mensajeTexto = document.getElementById('mensaje-texto');
+                    mensajeTexto.textContent = data.message || 'Registro fallido';
+                    mensaje.style.display = 'flex'; // Mostrar el cuadro
+                }
+            } catch (error) {
+                console.error('Error en el registro:', error);
+                const mensaje = document.getElementById('mensajeRegistro');
+                const mensajeTexto = document.getElementById('mensaje-texto');
+                mensajeTexto.textContent = 'Hubo un error al intentar registrarse';
+                mensaje.style.display = 'flex'; // Mostrar el cuadro
+            }
         });
 
-        const data = await response.json();
-        
-        if (response.ok) {
-            alert('Registro exitoso');
-            window.location.href = '/eventos';  // Igual que en login
-        } else {
-            alert(data.message || 'Registro fallido');
-        }
-    } catch (error) {
-        console.error('Error en el registro:', error);
-        alert('Hubo un error al intentar registrarse');
-    }
-});
+        // Cerrar el cuadro de mensaje cuando se haga clic en "Aceptar"
+        document.getElementById('mensaje-aceptar-btn').addEventListener('click', function () {
+            const mensaje = document.getElementById('mensajeRegistro');
+            mensaje.style.display = 'none'; // Ocultar el cuadro
+            window.location.href = '/eventos'; // Redirigir a eventos
+        });
 
     </script>
 </body>
