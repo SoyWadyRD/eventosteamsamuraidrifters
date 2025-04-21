@@ -18,18 +18,13 @@ const app = express();
 
 
 
-// Conexión a MongoDB usando la variable de entorno
-mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-.then(() => {
-    console.log('✅ Conexión a MongoDB exitosa!');
-})
-.catch((err) => {
-    console.error('❌ Error de conexión a MongoDB:', err);
-});
-
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => {
+        console.log('✅ Conexión a MongoDB exitosa!');
+    })
+    .catch((err) => {
+        console.error('❌ Error de conexión a MongoDB:', err);
+    });
 
 
 
