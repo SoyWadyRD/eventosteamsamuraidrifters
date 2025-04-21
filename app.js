@@ -1,9 +1,12 @@
+require('dotenv').config();
+
 const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const fs = require('fs');
 const path = require('path');
 const multer = require('multer');  // Importar multer
+
 
 
 // Importar las rutas
@@ -13,14 +16,29 @@ const Evento = require('./models/Evento'); // Asegúrate de que el modelo Evento
 
 const app = express();
 
-// Conectar a MongoDB
-mongoose.connect('mongodb+srv://andreslopez261316:andreslopez261316@eventostsd.ukyfwqb.mongodb.net/?retryWrites=true&w=majority&appName=eventostsd')
+
+
+// Conexión a MongoDB usando la variable de entorno
+mongoose.connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
 .then(() => {
     console.log('✅ Conexión a MongoDB exitosa!');
 })
 .catch((err) => {
     console.error('❌ Error de conexión a MongoDB:', err);
 });
+
+
+
+
+
+
+
+
+
+
 
 // Configuración de Multer
 const storage = multer.diskStorage({
