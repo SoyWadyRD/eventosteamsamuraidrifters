@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="../public/logo.ico" type="image/x-icon">
+  <title>Eventos</title>
+  <style>
+    /* Reseteo global para evitar problemas de márgenes y rellenos */
+/* Reseteo global para evitar problemas de márgenes y rellenos */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  overflow-x: hidden;
+  background-color: #0a0a0a;
+  color: #e0e0e0;
+  font-family: 'Orbitron', sans-serif;
+  scroll-behavior: smooth;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #0ff;
+  margin-bottom: 30px;
+  text-shadow: 2px 2px 8px #000;
+}
+
+/* Contenedor principal de los eventos */
+#eventos-lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  width: 100%;
+  max-width: 1200px;
+  box-sizing: border-box;
+}
+
+/* Contenedor de cada evento */
+#eventos-lista div {
+  background-color: #111;
+  padding: 20px;
+  border-radius: 15px;
+  width: 260px; /* Fija el tamaño de cada evento */
+  box-shadow: 0 0 15px #0ff;
+  text-align: center;
+  transition: transform 0.3s ease;
+  box-sizing: border-box; /* Asegura que el padding y borde no excedan el ancho */
+}
+
+/* Efecto hover en los eventos */
+#eventos-lista div:hover {
+  transform: translateY(-8px);
+}
+
+/* Títulos de los eventos */
+#eventos-lista h2 {
+  font-size: 1.5rem;
+  color: #0ff;
+  margin-bottom: 10px;
+  text-shadow: 1px 1px 5px #000;
+}
+
+/* Descripción de los eventos */
+#eventos-lista p {
+  font-size: 0.95rem;
+  color: #ccc;
+  margin-bottom: 8px;
+  text-shadow: 1px 1px 3px #000;
+}
+
+/* Imágenes de los eventos */
+#eventos-lista img {
+  width: 100%;
+  border-radius: 10px;
+  margin-top: 10px;
+  border: 2px solid #0ff;
+  box-shadow: 0 0 10px #0ff;
+}
+
+/* Botones principales */
+button {
+  margin-top: 10px;
+  padding: 10px 15px;
+  background-color: #00f0ff;
+  border: none;
+  border-radius: 8px;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+}
+
+button:hover {
+  background-color: #0ff;
+  box-shadow: 0 0 12px #0ff;
+}
+
+/* Contenedor de botones de admin ajustado */
+.admin-buttons {
+  margin-top: 15px;
+  width: 260px; /* Igual al tamaño de los eventos */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-sizing: border-box;
+  /* Centramos el contenedor de botones de admin */
+  align-items: center;
+  margin-left: 15px;
+}
+
+/* Botones de admin */
+.admin-buttons button {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.ver-inscritos-btn {
+  background-color: #25D366;
+  color: white;
+}
+
+.ver-inscritos-btn:hover {
+  background-color: #1ebc5e;
+  box-shadow: 0 0 12px #25D366;
+}
+
+.eliminar-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.eliminar-btn:hover {
+  background-color: #e53935;
+  box-shadow: 0 0 12px #f44336;
+}
+
+/* Modal de inscritos */
+#inscritos-modal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #111;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 20px #0ff;
+  z-index: 1000;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+}
+
+#inscritos-modal h2 {
+  color: #0ff;
+  margin-bottom: 20px;
+}
+
+#inscritos-modal ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+#inscritos-modal li {
+  padding: 5px 0;
+  border-bottom: 1px solid #0ff;
+}
+
+#inscritos-modal button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  width: auto;
+}
+
+#inscritos-modal button:hover {
+  background-color: #e53935;
+  box-shadow: 0 0 10px #f44336;
+}
+
+/* Mensajes de éxito o error */
+.message {
+  margin-top: 20px;
+  padding: 10px;
+  color: white;
+  background-color: #333;
+  border-radius: 5px;
+  text-align: center;
+  display: none;
+}
+
+.message.success {
+  background-color: #4caf50;
+}
+
+.message.error {
+  background-color: #f44336;
+}
+
+
+
+
+
+
+
+@media screen and (max-width: 2560px) {
+  h1 {
+    font-size: 2rem;
+  }
+
+  #eventos-lista {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #eventos-lista div {
+    width: 90%;  /* Ajuste en móvil */
+    max-width: 360px;
+    align-items: center;
+  }
+
+  .admin-buttons {
+    width: 100%;  /* Ajuste en móvil */
+    align-items: center;
+  }
+}
+
+/* Responsividad */
+@media screen and (max-width: 768px) {
+  h1 {
+    font-size: 2rem;
+  }
+
+  #eventos-lista {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #eventos-lista div {
+    width: 90%;  /* Ajuste en móvil */
+    max-width: 360px;
+    align-items: center;
+  }
+
+  .admin-buttons {
+    width: 100%;  /* Ajuste en móvil */
+    align-items: center;
+  }
+}
+
+  </style>
+</head>
+
+<body>
+  <h1>Eventos</h1>
+  <div id="eventos-lista"></div>
+
+
+
+  <!-- Modal de inscritos -->
+  <div id="inscritos-modal">
+    <h2>Lista de Inscritos</h2>
+    <ul id="lista-inscritos"></ul>
+    <button onclick="cerrarModal()" class="eliminar-evento-btn">Cerrar</button>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async function () {
+      const contenedorEventos = document.getElementById('eventos-lista');
+
+      try {
+        const respuesta = await fetch('/events/eventos');
+        const data = await respuesta.json();
+        console.log('Datos de eventos:', data);
+
+        const eventos = data.eventos || [];
+        const usuarioId = data.usuarioId;
+        const rol = data.rol;
+
+        contenedorEventos.innerHTML = '';
+
+        eventos.forEach(evento => {
+  const eventoDiv = document.createElement('div');
+  eventoDiv.classList.add('evento');
+  eventoDiv.id = `evento-${evento._id}`; // ID único para cada evento
+
+  let contenido = `
+    <h2>${evento.titulo}</h2>
+    <p>${evento.descripcion}</p>
+    <p><strong>Fecha del evento:</strong> ${new Date(evento.fecha).toLocaleString()}</p>
+    <p><strong>Fecha límite de inscripción:</strong> ${new Date(evento.fechaRegistroLimite).toLocaleString()}</p>
+  `;
+
+  if (evento.imagen) {
+    contenido += `<img src="${evento.imagen}" alt="Imagen del evento">`;
+  }
+
+  const fechaLimite = new Date(evento.fechaRegistroLimite);
+  const ahora = new Date();
+
+  if (fechaLimite < ahora) {
+    contenido += `<p style="color:red;">❌ Inscripciones cerradas</p>`;
+  } else {
+    if (evento.inscritos && evento.inscritos.includes(usuarioId)) {
+      contenido += `
+        <p style="color:green;">✅ Ya estás inscrito</p>
+        <button class="salir-btn" onclick="salir('${evento._id}')">Salir del Evento</button>
+      `;
+    } else {
+      contenido += `
+        <button class="inscribirse-btn" onclick="inscribirse('${evento._id}', '${usuarioId}')">Inscribirme</button>
+      `;
+    }
+  }
+
+  if (rol === 'admin') {
+    contenido += `
+      <div class="admin-buttons">
+        <button class="ver-inscritos-btn" onclick="verInscritos('${evento._id}')">Ver Inscritos</button>
+        <button class="eliminar-evento-btn" onclick="eliminarEvento('${evento._id}')">Eliminar Evento</button>
+      </div>
+    `;
+  }
+
+  eventoDiv.innerHTML = contenido;
+  contenedorEventos.appendChild(eventoDiv);
+});
+      } catch (error) {
+        console.error('Error al cargar los eventos:', error);
+        alert('Error al cargar los eventos.');
+      }
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// 🧹 Función mejorada para inscribirse con redirección a login si no está logeado
+
+async function inscribirse(eventoId) {
+  try {
+    const respuesta = await fetch(`/events/inscribir/${eventoId}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include' // ⬅️ MUY IMPORTANTE para enviar cookies de sesión
+    });
+
+    if (respuesta.status === 401) {
+      alert('Debes iniciar sesión para inscribirte en un evento.');
+      window.location.href = '/public/login.html';
+      return;
+    }
+
+    const data = await respuesta.json();
+
+    if (respuesta.ok) {
+      alert(data.message);
+      location.reload(); // ✅ Esto recarga la página y ahora sí el servidor devuelve el nuevo estado (inscrito)
+    } else {
+      alert(data.message);
+    }
+  } catch (error) {
+    console.error('Error al inscribirse:', error);
+    alert('Hubo un error al inscribirse. Intenta nuevamente.');
+  }
+}
+
+
+
+
+
+
+async function salir(eventoId) {
+  try {
+    const respuesta = await fetch(`/events/salir/${eventoId}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',  // Esto es crucial para enviar cookies de sesión
+    });
+
+    const data = await respuesta.json();
+
+    if (respuesta.ok) {
+      alert(data.message);
+      location.reload(); // Recarga la página para que se actualice el estado
+    } else {
+      alert(data.message); // Muestra el mensaje de error
+    }
+  } catch (error) {
+    console.error('Error al intentar salir del evento:', error);
+    alert('Hubo un error al intentar salir del evento.');
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+    async function eliminarEvento(eventoId) {
+      const confirmacion = confirm('¿Estás seguro de que quieres eliminar este evento?');
+      if (!confirmacion) return;
+
+      try {
+        const respuesta = await fetch(`/events/eliminar/${eventoId}`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+        });
+
+        const data = await respuesta.json();
+        if (respuesta.ok) {
+          alert(data.message);
+          location.reload();
+        } else {
+          alert(data.message);
+        }
+      } catch (error) {
+        console.error('Error al eliminar el evento:', error);
+        alert('Error al intentar eliminar el evento.');
+      }
+    }
+
+    async function verInscritos(eventoId) {
+      try {
+        const respuesta = await fetch(`/events/inscritos/${eventoId}`);
+        const data = await respuesta.json();
+
+        if (respuesta.ok) {
+          const lista = data.inscritos;
+          const listaUl = document.getElementById('lista-inscritos');
+          listaUl.innerHTML = '';
+
+          if (lista.length === 0) {
+            listaUl.innerHTML = '<li>No hay inscritos en este evento.</li>';
+          } else {
+            lista.forEach(nombre => {
+              const li = document.createElement('li');
+              li.textContent = nombre;
+              listaUl.appendChild(li);
+            });
+          }
+
+          document.getElementById('inscritos-modal').style.display = 'block';
+        } else {
+          alert(data.message || 'Error al obtener los inscritos');
+        }
+      } catch (error) {
+        console.error('Error al obtener inscritos:', error);
+        alert('Error al obtener los inscritos');
+      }
+    }
+
+    function cerrarModal() {
+      document.getElementById('inscritos-modal').style.display = 'none';
+    }
+  </script>
+</body>
+</html>

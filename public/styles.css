@@ -1,0 +1,102 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Estilo general */
+  html, body {
+    width: 100%;
+    min-height: 100vh;
+    background-color: #0a0a0a;
+    color: #e0e0e0;
+    font-family: 'Orbitron', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  /* Título */
+  h1 {
+    color: #0ff;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 8px #000;
+    text-align: center;
+  }
+  
+  /* Formulario */
+  form {
+    background-color: #111;
+    padding: 30px 25px;
+    border-radius: 15px;
+    box-shadow: 0 0 15px #0ff;
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  label {
+    font-size: 1rem;
+    color: #ccc;
+    text-shadow: 1px 1px 3px #000;
+  }
+  
+  input[type="text"],
+  input[type="datetime-local"],
+  textarea,
+  input[type="file"] {
+    width: 100%;
+    padding: 12px;
+    background-color: #0a0a0a;
+    border: 2px solid #0ff;
+    border-radius: 8px;
+    color: #e0e0e0;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  input[type="text"]:focus,
+  input[type="datetime-local"]:focus,
+  textarea:focus,
+  input[type="file"]:focus {
+    border-color: #00f0ff;
+    box-shadow: 0 0 8px #0ff;
+  }
+  
+  textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+  
+  /* Botón */
+  button[type="submit"] {
+    margin-top: 10px;
+    padding: 12px;
+    background-color: #00f0ff;
+    color: #000;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #0ff;
+    box-shadow: 0 0 12px #0ff;
+  }
+  
+  /* Responsive */
+  @media screen and (max-width: 600px) {
+    h1 {
+      font-size: 2rem;
+    }
+  }
+  

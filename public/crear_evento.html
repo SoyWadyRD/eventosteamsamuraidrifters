@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="logo.ico" type="image/x-icon">
+    <link rel="stylesheet" href="styles.css">
+    <title>Crear Evento</title>
+</head>
+<body>
+    <h1>Crear un nuevo evento</h1>
+
+    <form id="eventoForm" enctype="multipart/form-data">
+        <label for="titulo">Título del Evento:</label>
+        <input type="text" id="titulo" name="titulo" required><br>
+
+        <label for="descripcion">Descripción del Evento:</label>
+        <textarea id="descripcion" name="descripcion" required></textarea><br>
+
+        <label for="fecha">Fecha del Evento:</label>
+        <input type="datetime-local" id="fecha" name="fecha" required><br>
+
+        <label for="fechaRegistroLimite">Fecha límite para registrarse:</label>
+        <input type="datetime-local" id="fechaRegistroLimite" name="fechaRegistroLimite" required><br>
+
+        <label for="imagen">Imagen del Evento (opcional):</label>
+        <input type="file" id="imagen" name="imagen"><br>
+
+        <button type="submit">Crear Evento</button>
+    </form>
+
+    <script>
+        document.getElementById('eventoForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const formData = new FormData();
+            formData.append('titulo', document.getElementById('titulo').value);
+            formData.append('descripcion', document.getElementById('descripcion').value);
+            formData.append('fecha', document.getElementById('fecha').value);
+            formData.append('fechaRegistroLimite', document.getElementById('fechaRegistroLimite').value);
+            formData.append('imagen', document.getElementById('imagen').files[0]);
+
+            try {
+                const response = await fetch('/events/crear', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                // Verifica si la respuesta fue exitosa
+                if (response.ok) {
+                    const data = await response.json();
+                    alert(data.message);
+                } else {
+                    const data = await response.json();
+                    alert('Error: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error al enviar el formulario:', error);
+                alert('Hubo un problema al enviar el formulario.');
+            }
+        });
+    </script>
+</body>
+</html>
