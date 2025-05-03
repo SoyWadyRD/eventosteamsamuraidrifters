@@ -36,54 +36,74 @@
 </div>
 
 
-    <script>
- document.getElementById('registerForm').addEventListener('submit', async function (e) {
-            e.preventDefault();
+<script>
+    document.getElementById('registerForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
 
-            const nombreReal = document.getElementById('nombreReal').value;
-            const nombreJuego = document.getElementById('nombreJuego').value;
-            const contrasena = document.getElementById('contrasena').value;
+        const nombreReal = document.getElementById('nombreReal').value;
+        let nombreJuego = document.getElementById('nombreJuego').value;
+        const contrasena = document.getElementById('contrasena').value;
 
-            try {
-                const response = await fetch('/auth/registro', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ nombreReal, nombreJuego, contrasena })
-                });
+        // Verificar que el nombre de juego esté en mayúsculas
+        if (nombreJuego !== nombreJuego.toUpperCase()) {
+            const mensaje = document.getElementById('mensajeRegistro');
+            const mensajeTexto = document.getElementById('mensaje-texto');
+            mensajeTexto.textContent = 'El nombre de juego debe ser todo en mayúsculas.';
+            mensaje.style.display = 'flex'; // Mostrar el cuadro
+            return; // Detener el envío del formulario
+        }
 
-                const data = await response.json();
-                
-                if (response.ok) {
-                    // Mostrar cuadro de mensaje de éxito
-                    const mensaje = document.getElementById('mensajeRegistro');
-                    const mensajeTexto = document.getElementById('mensaje-texto');
-                    mensajeTexto.textContent = 'Registro exitoso';
-                    mensaje.style.display = 'flex'; // Mostrar el cuadro
-                } else {
-                    // Mostrar cuadro de mensaje de error
-                    const mensaje = document.getElementById('mensajeRegistro');
-                    const mensajeTexto = document.getElementById('mensaje-texto');
-                    mensajeTexto.textContent = data.message || 'Registro fallido';
-                    mensaje.style.display = 'flex'; // Mostrar el cuadro
-                }
-            } catch (error) {
-                console.error('Error en el registro:', error);
+        // Verificar que el nombre de juego comience con "TSD_"
+        if (!nombreJuego.startsWith('TSD_')) {
+            const mensaje = document.getElementById('mensajeRegistro');
+            const mensajeTexto = document.getElementById('mensaje-texto');
+            mensajeTexto.textContent = 'El nombre de juego debe comenzar con "TSD_" y ser todo en mayúsculas.';
+            mensaje.style.display = 'flex'; // Mostrar el cuadro
+            return; // Detener el envío del formulario
+        }
+
+        try {
+            const response = await fetch('/auth/registro', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ nombreReal, nombreJuego, contrasena })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Mostrar cuadro de mensaje de éxito
                 const mensaje = document.getElementById('mensajeRegistro');
                 const mensajeTexto = document.getElementById('mensaje-texto');
-                mensajeTexto.textContent = 'Hubo un error al intentar registrarse';
+                mensajeTexto.textContent = 'Registro exitoso';
+                mensaje.style.display = 'flex'; // Mostrar el cuadro
+            } else {
+                // Mostrar cuadro de mensaje de error
+                const mensaje = document.getElementById('mensajeRegistro');
+                const mensajeTexto = document.getElementById('mensaje-texto');
+                mensajeTexto.textContent = data.message || 'Registro fallido';
                 mensaje.style.display = 'flex'; // Mostrar el cuadro
             }
-        });
-
-        // Cerrar el cuadro de mensaje cuando se haga clic en "Aceptar"
-        document.getElementById('mensaje-aceptar-btn').addEventListener('click', function () {
+        } catch (error) {
+            console.error('Error en el registro:', error);
             const mensaje = document.getElementById('mensajeRegistro');
-            mensaje.style.display = 'none'; // Ocultar el cuadro
-            window.location.href = '/eventos'; // Redirigir a eventos
-        });
+            const mensajeTexto = document.getElementById('mensaje-texto');
+            mensajeTexto.textContent = 'Hubo un error al intentar registrarse';
+            mensaje.style.display = 'flex'; // Mostrar el cuadro
+        }
+    });
 
-    </script>
+    // Cerrar el cuadro de mensaje cuando se haga clic en "Aceptar"
+    document.getElementById('mensaje-aceptar-btn').addEventListener('click', function () {
+        const mensaje = document.getElementById('mensajeRegistro');
+        mensaje.style.display = 'none'; // Ocultar el cuadro
+        if (document.getElementById('mensaje-texto').textContent === 'Registro exitoso') {
+            window.location.href = '/eventos'; // Redirigir solo si el registro fue exitoso
+        }
+    });
+</script>
+
 </body>
 </html>

@@ -18,14 +18,18 @@ router.post('/crear', upload.single('imagen'), async (req, res) => {
 
         let imagenUrl = '';
         if (req.file) {
-            imagenUrl = req.file.path; // 👈 AHORA usamos el link de Cloudinary
+            imagenUrl = req.file.path; // Usamos el link de Cloudinary
         }
+
+        // Convertir las fechas a UTC antes de guardarlas
+        const fechaUTC = new Date(fecha).toISOString();  // Fecha del evento en UTC
+        const fechaRegistroLimiteUTC = new Date(fechaRegistroLimite).toISOString();  // Fecha de registro límite en UTC
 
         const nuevoEvento = new Evento({
             titulo,
             descripcion,
-            fecha: new Date(fecha),
-            fechaRegistroLimite: new Date(fechaRegistroLimite),
+            fecha: fechaUTC,  // Guardamos la fecha en formato UTC
+            fechaRegistroLimite: fechaRegistroLimiteUTC,  // Guardamos la fecha de registro en UTC
             imagen: imagenUrl
         });
 

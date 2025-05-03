@@ -395,7 +395,7 @@ button:hover {
       document.querySelector('.crear-evento-btn-container').style.display = 'block';
     }
 
-    eventos.forEach(evento => {
+    eventos.reverse().forEach(evento => {
       const eventoDiv = document.createElement('div');
       eventoDiv.classList.add('evento');
       eventoDiv.id = `evento-${evento._id}`; // ID único para cada evento

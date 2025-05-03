@@ -51,49 +51,59 @@
 
     <script>
          document.getElementById('eventoForm').addEventListener('submit', async function (e) {
-            e.preventDefault();
+    e.preventDefault();
 
-            const formData = new FormData();
-            formData.append('titulo', document.getElementById('titulo').value);
-            formData.append('descripcion', document.getElementById('descripcion').value);
-            formData.append('fecha', document.getElementById('fecha').value);
-            formData.append('fechaRegistroLimite', document.getElementById('fechaRegistroLimite').value);
-            formData.append('imagen', document.getElementById('imagen').files[0]);
+    // Obtener las fechas locales del formulario
+    const fechaEventoLocal = document.getElementById('fecha').value;
+    const fechaRegistroLimiteLocal = document.getElementById('fechaRegistroLimite').value;
 
-            try {
-                const response = await fetch('/events/crear', {
-                    method: 'POST',
-                    body: formData
-                });
+    // Convertir las fechas locales a objetos Date
+    const fechaEventoUTC = new Date(fechaEventoLocal).toISOString(); // Convertimos a UTC
+    const fechaRegistroLimiteUTC = new Date(fechaRegistroLimiteLocal).toISOString(); // Convertimos a UTC
 
-                // Verifica si la respuesta fue exitosa
-                if (response.ok) {
-                    const data = await response.json();
-                    mostrarMensaje('Evento creado con éxito!', 'success');
-                    
-                    // Redirige a la página de eventos después de que el usuario cierre el mensaje
-                    document.getElementById('mensaje-aceptar').addEventListener('click', () => {
-                        window.location.href = '/eventos';
-                    });
-                } else {
-                    const data = await response.json();
-                    mostrarMensaje('Error: ' + data.message, 'error');
-                }
-            } catch (error) {
-                console.error('Error al enviar el formulario:', error);
-                mostrarMensaje('Hubo un problema al enviar el formulario.', 'error');
-            }
+    // Crear el FormData con los datos del formulario
+    const formData = new FormData();
+    formData.append('titulo', document.getElementById('titulo').value);
+    formData.append('descripcion', document.getElementById('descripcion').value);
+    formData.append('fecha', fechaEventoUTC); // Enviamos la fecha en UTC
+    formData.append('fechaRegistroLimite', fechaRegistroLimiteUTC); // Enviamos la fecha en UTC
+    formData.append('imagen', document.getElementById('imagen').files[0]);
+
+    try {
+        const response = await fetch('/events/crear', {
+            method: 'POST',
+            body: formData
         });
 
-        function mostrarMensaje(mensaje, tipo) {
-            const mensajeDiv = document.getElementById('mensaje');
-            const mensajeTexto = document.getElementById('mensaje-texto');
-
-            mensajeTexto.textContent = mensaje;
-            mensajeDiv.classList.remove('success', 'error');
-            mensajeDiv.classList.add(tipo);
-            mensajeDiv.style.display = 'flex'; // Se muestra el mensaje como un modal
+        // Verifica si la respuesta fue exitosa
+        if (response.ok) {
+            const data = await response.json();
+            mostrarMensaje('Evento creado con éxito!', 'success');
+            
+            // Redirige a la página de eventos después de que el usuario cierre el mensaje
+            document.getElementById('mensaje-aceptar').addEventListener('click', () => {
+                window.location.href = '/eventos';
+            });
+        } else {
+            const data = await response.json();
+            mostrarMensaje('Error: ' + data.message, 'error');
         }
+    } catch (error) {
+        console.error('Error al enviar el formulario:', error);
+        mostrarMensaje('Hubo un problema al enviar el formulario.', 'error');
+    }
+});
+
+function mostrarMensaje(mensaje, tipo) {
+    const mensajeDiv = document.getElementById('mensaje');
+    const mensajeTexto = document.getElementById('mensaje-texto');
+
+    mensajeTexto.textContent = mensaje;
+    mensajeDiv.classList.remove('success', 'error');
+    mensajeDiv.classList.add(tipo);
+    mensajeDiv.style.display = 'flex'; // Se muestra el mensaje como un modal
+}
+
     </script>
 </body>
 </html>
